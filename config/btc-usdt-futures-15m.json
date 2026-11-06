@@ -1,0 +1,43 @@
+{
+  "$schema": "https://schema.freqtrade.io/schema.json",
+  "max_open_trades": 1,
+  "stake_currency": "USDT",
+  "stake_amount": 100,
+  "tradable_balance_ratio": 0.99,
+  "fiat_display_currency": "USD",
+  "dry_run": true,
+  "dry_run_wallet": 1000,
+  "datadir": "/workspace/data/binance",
+  "trading_mode": "futures",
+  "margin_mode": "isolated",
+  "futures_funding_rate": 0,
+  "timeframe": "15m",
+  "dataformat_ohlcv": "json",
+  "entry_pricing": {
+    "price_side": "same",
+    "use_order_book": true,
+    "order_book_top": 1
+  },
+  "exit_pricing": {
+    "price_side": "same",
+    "use_order_book": true,
+    "order_book_top": 1
+  },
+  "exchange": {
+    "name": "binance",
+    "key": "",
+    "secret": "",
+    "ccxt_config": {
+      "options": {"fetchMarkets": {"types": ["linear"]}},
+      "urls": {"api": {"fapiPublic": "https://testnet.binancefuture.com/fapi/v1"}}
+    },
+    "ccxt_async_config": {
+      "options": {"fetchMarkets": {"types": ["linear"]}},
+      "urls": {"api": {"fapiPublic": "https://testnet.binancefuture.com/fapi/v1"}}
+    },
+    "pair_whitelist": ["BTC/USDT:USDT"],
+    "pair_blacklist": []
+  },
+  "pairlists": [{"method": "StaticPairList"}],
+  "telegram": {"enabled": false, "token": "", "chat_id": ""}
+}

@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+backtests/generated/
+backtests/generated-*
+backtests/.last_result.json
+data/binance/futures/*.json
+data/binance/futures/*.feather
+.DS_Store
