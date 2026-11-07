@@ -18,6 +18,20 @@ with Freqtrade strategy interface version 3.
 - Do not call a migration an upstream strategy reproduction unless its signal,
   sizing, funding, and execution model have been reproduced.
 
+## Original-signal migration conventions
+
+- `strategies/BtcOriginalFreqtrade.py` contains the 1x bridges for the original
+  V4.5.3, V7.1 and WZY V7.2 engines. Keep the vendored source under
+  `src/btc_regime/` in sync with the recorded parameter files in `config/`.
+- The bridge contract is `target = clip(original_signal, -1, 1)` and
+  `leverage() == 1.0`. Do not describe native Freqtrade OHLC results as
+  identical to maker-queue or order-book simulations.
+- Validate signal contract changes with
+  `scripts/validate_original_migrations.py` before changing backtest results.
+- The exact migration configuration is
+  `config/btc-usdt-futures-1h-exact-1x.json`; its complete-history command
+  uses the checked-in 1h data and no `--timeframe-detail` by default.
+
 ## Research discipline
 
 - Select parameters on the training period, then report validation and holdout

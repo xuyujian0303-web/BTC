@@ -17,11 +17,48 @@
 
 这些是同一 15m 配置下的迁移比较，不应与上游仓库的自研 micro-backtest 结果直接比较。V4.5.3、V7.1、V7.2 在这里是 Freqtrade 适配版本；它们不复现上游的动态杠杆、风险预算、资金费和真实 Maker 队列。
 
+## 原始信号的 Freqtrade 迁移（1x）
+
+本次新增的三个类保留朋友仓库/上游仓库的原始信号状态机和目标敞口：
+
+- `V453FreqtradeExact1x`：主链 V4.5.3，信号调用冻结的 V4.5.2 b022。
+- `V71FreqtradeExact1x`：修改分支的 `v7.py` 和 `v71_params.json`。
+- `V72FreqtradeExact1x`：WZY 分支的 `v71_live.py` 和 `wzy_v72_tp_refined_params.json`，包含许可、质量和保护状态机。
+
+桥接层把原始有符号目标裁剪到 `[-1, 1]`，`leverage()` 固定返回 `1.0`，并通过 `custom_stake_amount`、`adjust_trade_position`、`custom_stoploss`、`custom_roi` 和 `custom_exit` 执行目标仓位与保护价。信号契约校验见 [`reports/original_migration_signal_validation.json`](reports/original_migration_signal_validation.json)。
+
+使用官方 Freqtrade Docker 回测这三个迁移版本：
+
+```bash
+docker run --rm -v "$PWD:/workspace" -w /workspace freqtradeorg/freqtrade:stable \
+  backtesting \
+  --config /workspace/config/btc-usdt-futures-1h-exact-1x.json \
+  --datadir /workspace/data/binance \
+  --strategy-path /workspace/strategies \
+  --strategy-list V453FreqtradeExact1x V71FreqtradeExact1x V72FreqtradeExact1x \
+  --timerange 20211105-20261105 \
+  --export trades \
+  --backtest-directory /workspace/backtests/exact-full-1h
+```
+
+本机数据实际覆盖 `2021-11-05 00:00 UTC` 至 `2026-11-04 23:00 UTC`，初始资金 10,000 USDT，Binance USD-M、isolated、最多一个持仓、每边 0.05% 手续费。使用 Freqtrade `2026.10` 的 1h 主周期完整回测结果如下；结果文件已保存在 `backtests/exact-full-1h-2026-11-07_08-13-59.zip`：
+
+| 原始迁移 | 交易数 | 净收益 | CAGR | 最大回撤 | 胜率 | 多/空交易 |
+|---|---:|---:|---:|---:|---:|---:|
+| `V453FreqtradeExact1x` | 370 | +85.99% | 13.21% | 20.69% | 32.97% | 289 / 81 |
+| `V71FreqtradeExact1x` | 902 | -32.77% | -7.63% | 54.64% | 34.04% | 517 / 385 |
+| `V72FreqtradeExact1x` | 1,086 | -43.00% | -10.63% | 48.58% | 31.86% | 543 / 543 |
+
+这些数字是 1x、1h OHLC 回测，不是朋友仓库使用 5x、Maker 代理和 5m 盯市的结果。Freqtrade 原生 OHLC 回测不能模拟 Maker 排队、订单簿成交、原始分钟模拟器的冲击和部分成交，因此“信号/仓位管理移植”与“执行结果完全相同”是两个不同命题。`--timeframe-detail 1m` 的细节回测可单独运行，但五年逐分钟回调会显著增加耗时。
+
 ## 目录
 
 - `strategies/`：Freqtrade 策略文件。`BtcTrendV10Optimized.py` 是冻结的最佳候选；其基础信号实现位于 `BtcTrendIntradayExperiments.py`。四版本比较类位于 `BtcRegimeCompare.py`。
-- `config/`：统一的 BTC 永续 15m 回测配置，无 API 密钥。
+- `strategies/BtcOriginalFreqtrade.py`：三套原始信号的 1x Freqtrade 桥接。
+- `src/btc_regime/`：从原始研究仓库移植的信号引擎源码，供桥接层直接调用。
+- `config/`：统一的 BTC 永续 15m 配置，以及原始迁移用的 1h/1x 配置和参数文件，无 API 密钥。
 - `backtests/`：官方 Freqtrade 导出的结果 ZIP、JSON 结果和实际配置。
+- `reports/`：原始迁移的来源清单、信号契约校验和完整 1x 回测摘要。
 - `data/binance/futures/`：压缩后的 1m、15m、1h、4h 行情和来源摘要。`data/SHA256SUMS` 用于校验文件。
 - `research/`：参数筛选、V10 实验和历史版本比较报告。
 - `AGENTS.md`：后续自动化代理和贡献者必须遵守的回测、数据和安全约定。

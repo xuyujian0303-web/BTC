@@ -1,0 +1,61 @@
+{
+  "freqtrade_version": "2026.10",
+  "exchange": "binance",
+  "pair": "BTC/USDT:USDT",
+  "trading_mode": "futures",
+  "margin_mode": "isolated",
+  "leverage": 1.0,
+  "starting_balance": 10000.0,
+  "fee_per_side": 0.0005,
+  "timeframe": "1h",
+  "timerange": "20211105-20261105",
+  "effective_data_range": "2021-11-05 00:00 UTC to 2026-11-04 23:00 UTC",
+  "command": "docker run --rm -v $PWD:/workspace -w /workspace freqtradeorg/freqtrade:stable backtesting --config /workspace/config/btc-usdt-futures-1h-exact-1x.json --datadir /workspace/data/binance --strategy-path /workspace/strategies --strategy-list V453FreqtradeExact1x V71FreqtradeExact1x V72FreqtradeExact1x --timerange 20211105-20261105 --export trades --backtest-directory /workspace/backtests/exact-full-1h",
+  "strategies": {
+    "V453FreqtradeExact1x": {
+      "trades": 370,
+      "final_balance": 18598.86763077,
+      "profit_abs": 8598.86763077,
+      "profit_pct": 85.99,
+      "cagr": 13.213261180934532,
+      "max_drawdown_pct": 20.692727931351293,
+      "max_drawdown_abs": 2158.57030912,
+      "winrate": 32.97297297297297,
+      "long_trades": 289,
+      "short_trades": 81,
+      "profit_factor": 1.3291820727648798
+    },
+    "V71FreqtradeExact1x": {
+      "trades": 902,
+      "final_balance": 6723.090513099997,
+      "profit_abs": -3276.9094869,
+      "profit_pct": -32.77,
+      "cagr": -7.633647979117364,
+      "max_drawdown_pct": 54.63936697904137,
+      "max_drawdown_abs": 7500.85471697,
+      "winrate": 34.03547671840346,
+      "long_trades": 517,
+      "short_trades": 385,
+      "profit_factor": 0.9303634513413972
+    },
+    "V72FreqtradeExact1x": {
+      "trades": 1086,
+      "final_balance": 5700.286151250003,
+      "profit_abs": -4299.71384875,
+      "profit_pct": -43.0,
+      "cagr": -10.632557097681761,
+      "max_drawdown_pct": 48.58060321455139,
+      "max_drawdown_abs": 5063.61119615,
+      "winrate": 31.860036832412525,
+      "long_trades": 543,
+      "short_trades": 543,
+      "profit_factor": 0.827769662153132
+    }
+  },
+  "limitations": [
+    "This is native Freqtrade 1h OHLC backtesting without timeframe-detail.",
+    "Funding history is not present in the Binance OHLCV input and is neutralized to zero by the bridge.",
+    "The Binance Vision 1h input contains a 2026-10-28 gap; Freqtrade's loaded dataframe and the report retain the source data limitation.",
+    "Maker queue, order-book fills, impact, and partial fills from the original simulators are not reproduced."
+  ]
+}

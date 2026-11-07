@@ -1,0 +1,39 @@
+{
+  "input": "data/binance/futures/BTC_USDT_USDT-1h-futures.json",
+  "contract": "target = clip(original signal, -1, 1), leverage = 1.0",
+  "strategies": [
+    {
+      "strategy": "V453FreqtradeExact1x",
+      "bars": 45384,
+      "source_nonzero_bars": 12584,
+      "target_nonzero_bars": 12584,
+      "side_transitions": 780,
+      "max_abs_target": 1.0,
+      "max_abs_contract_error": 0.0,
+      "stop_rows": 12584,
+      "take_profit_rows": 1362
+    },
+    {
+      "strategy": "V71FreqtradeExact1x",
+      "bars": 45384,
+      "source_nonzero_bars": 13898,
+      "target_nonzero_bars": 13898,
+      "side_transitions": 1854,
+      "max_abs_target": 1.0,
+      "max_abs_contract_error": 0.0,
+      "stop_rows": 0,
+      "take_profit_rows": 0
+    },
+    {
+      "strategy": "V72FreqtradeExact1x",
+      "bars": 45384,
+      "source_nonzero_bars": 9868,
+      "target_nonzero_bars": 9868,
+      "side_transitions": 2296,
+      "max_abs_target": 1.0,
+      "max_abs_contract_error": 0.0,
+      "stop_rows": 9868,
+      "take_profit_rows": 9868
+    }
+  ]
+}

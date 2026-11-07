@@ -1,0 +1,29 @@
+{
+  "v453": {
+    "source_repository": "/Users/xuyujian/Desktop/Bitget_BTC",
+    "source_commit": "81bf749160c0fa52ab73b9e7413200360ca1effb",
+    "signal_source": "src/btc_regime/v453.py -> v452.py -> v444.py",
+    "parameters": "config/v4_5_3_params.json"
+  },
+  "v71": {
+    "source_repository": "/Users/xuyujian/Desktop/Binance-BTC-upstream-check",
+    "source_ref": "origin/xuyujian修改",
+    "source_commit": "9371974648c55b7bbe175a3fd876ca86ba69320d",
+    "signal_source": "src/btc_regime/v7.py",
+    "parameters": "config/v71_params.json"
+  },
+  "v72": {
+    "source_repository": "/Users/xuyujian/Desktop/Binance-BTC-upstream-check",
+    "source_ref": "origin/Binance-BTC-wzy",
+    "source_commit": "98175aed764d5989dc4d45698053f382d02a06bd",
+    "signal_source": "src/btc_regime/v71_live.py",
+    "parameters": "config/wzy_v72_tp_refined_params.json",
+    "execution_metadata": "config/wzy_v72_execution.json"
+  },
+  "execution_contract": {
+    "target_exposure": "clip(original signal, -1, 1)",
+    "leverage": 1.0,
+    "funding_input": "zero when OHLCV has no funding_rate column",
+    "native_freqtrade_limit": "OHLC candle execution; no maker queue or order-book replay"
+  }
+}
